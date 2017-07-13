@@ -53,11 +53,29 @@ public class Move {
 	}
 	
 	/**
+	 * Whether this is a valid Move for this Board
+	 * @return Whether this Move is valid
+	 */
+	public boolean isValid() {
+		return this.board.isValidMove(this);
+	}
+	
+	/**
+	 * Checks whether the row and column indices are within the
+	 * boundaries of the Board
+	 * @return Whether the indices are within the boundaries
+	 */
+	public boolean inBoundaries() {
+		return row >= 0 && row < Board.NUM_ROWS
+				&& col >= 0 && col < Board.NUM_COLS;
+	}
+	
+	/**
 	 * Whether this Move is a winning Move, i.e. if the Player
 	 * plays this, will they win the t4 Game.
 	 * @return Whether the Move is a winning Move
 	 */
-	public boolean isWinning() {
+	protected boolean isWinning() {
 		if (checkHorizontal(row)) return true;
 		if (checkVertical(col)) return true;
 		if (row == col)
@@ -118,7 +136,7 @@ public class Move {
 	 * @return Whether the Player has played in every Cell
 	 */
 	private boolean checkDiag2() {
-		for (int i = Board.NUM_ROWS, j = 0; i >= 0 && j < Board.NUM_COLS; i--, j++) {
+		for (int i = Board.NUM_ROWS - 1, j = 0; i >= 0 && j < Board.NUM_COLS; i--, j++) {
 			if (!board.cells[i][j].isOccupied())
 				return false;
 			if (!board.cells[i][j].getPlayer().equals(Player))

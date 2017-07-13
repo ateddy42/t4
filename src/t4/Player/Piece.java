@@ -5,9 +5,10 @@ package t4.Player;
  * 
  * @author Teddy
  */
-public enum Piece {
+public enum Piece implements Comparable<Piece> {
 	X ("x"), // X goes first
-	O ("o"); // O goes second
+	O ("o"), // O goes second
+	BLANK (" "); // piece not yet chosen
 	
 	private final String marker;
 	
@@ -22,6 +23,10 @@ public enum Piece {
 	/**
 	 * Returns the marker for this Piece
 	 */
+	public String getMarker() {
+		return this.marker;
+	}
+	
 	public String toString() {
 		return this.marker;
 	}

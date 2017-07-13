@@ -28,9 +28,23 @@ public class Board {
 	 * @param move Move to be played
 	 * @return Whether the Move is valid
 	 */
-	public boolean isValidMove(Move move) {
+	protected boolean isValidMove(Move move) {
+		if (move == null || !move.inBoundaries()) return false;
 		Cell cell = cells[move.getRow()][move.getCol()];
-		return !cell.isOccupied();
+		return cell != null && !cell.isOccupied();
+	}
+	
+	/**
+	 * Checks whether there are any open Cells on this Board
+	 * @return Whether there are any open Cells on this Board
+	 */
+	public boolean isPlayable() {
+		for (int i = 0; i < Board.NUM_ROWS; i++) {
+			for (int j = 0; j < Board.NUM_COLS; j++) {
+				if (!cells[i][j].isOccupied()) return true;
+			}
+		}
+		return false;
 	}
 	
 	/**

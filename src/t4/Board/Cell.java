@@ -1,5 +1,6 @@
 package t4.Board;
 
+import t4.Player.Piece;
 import t4.Player.Player;
 
 /**
@@ -63,5 +64,13 @@ public class Cell {
 	 */
 	public int getCol() {
 		return this.col;
+	}
+	
+	public String toString(boolean indices) {
+		if (isOccupied())
+			return Player.getPiece().toString();
+		if (indices)
+			return String.valueOf(this.row * Board.NUM_ROWS + this.col);
+		return Piece.BLANK.toString();
 	}
 }
