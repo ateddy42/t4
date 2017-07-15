@@ -108,4 +108,29 @@ public class NeuralNet {
 		// fetch updated values for output layer
 		return getOutputLayer().getValues();
 	}
+	
+	/**
+	 * Update the values of the weights for all Bridges in this
+	 * NeuralNet for the non-null entries in the <code>desired</code>
+	 * array.
+	 * @param input Values for the input layer
+	 * @param desired Desired output values
+	 * @param payoff Payoff for this set of inputs
+	 * @throws Exception If number of values != number of Neurons
+	 */
+	public void backpropagate(double[] input, double[] desired,
+			double payoff) throws Exception {
+		setInputValues(input);
+		double[] output = getOutputValues();
+		for (int i = layers.size() - 1; i >= 0; i--) {
+			Layer layer = layers.get(i);
+			Layer previous = layer.previous;
+			if (previous == null) return;
+			
+			for (int j = 0; j < desired.length; j++) {
+				Neuron n = layer.neurons[j];
+				n.backpropagate(alpha, output[j], desired[j], payoff, activation);
+			}
+		}
+	}
 }

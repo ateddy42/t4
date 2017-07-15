@@ -9,6 +9,7 @@ package t4.nn;
 public class Layer {
 	protected Neuron[] neurons;
 	protected NeuralNet nn;
+	protected Layer previous;
 	private String name;
 	
 	/**
@@ -22,12 +23,12 @@ public class Layer {
 		this.nn = nn;
 		this.name = name;
 		this.neurons = new Neuron[numNeurons];
-		Layer lastLayer = nn.getOutputLayer();
-		int numInputs = lastLayer == null ? 0 : lastLayer.neurons.length + 1;
+		previous = nn.getOutputLayer();
+		int numInputs = previous == null ? 0 : previous.neurons.length + 1;
 		for (int i = 0; i < numNeurons; i++) {
 			Neuron neuron = new Neuron(0, numInputs, this);
 			// check if previous layer exists
-			if (lastLayer != null) {
+			if (previous != null) {
 				// add bridge to bias
 				neuron.inputs[0] = new Bridge(nn.bias,
 						NeuralNet.INIT_BIAS_WEIGHT);
@@ -35,13 +36,22 @@ public class Layer {
 				// add bridge to all previous layer neurons
 				for (int j = 1; j < numInputs; j++) {
 					neuron.inputs[j] = new Bridge(
-							lastLayer.neurons[j - 1],
+							previous.neurons[j - 1],
 							NeuralNet.INIT_NEURON_WEIGHT);
 				}
 			}
 			neurons[i] = neuron;
 		}
 		nn.layers.add(this);
+	}
+	
+	/**
+	 * Checks whether this Layer has a previous Layer, or if
+	 * it is the first Layer
+	 * @return Whether this Layer has a previous Layer
+	 */
+	protected boolean isInputLayer() {
+		return previous == null;
 	}
 	
 	/**

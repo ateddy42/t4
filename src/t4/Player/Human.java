@@ -35,15 +35,8 @@ public class Human extends Player {
 	}
 
 	@Override
-	public void addWin() { this.score++; }
-
-	@Override
-	public void addLoss() { return; }
-
-	@Override
-	public void addTie() { return; }
-
-	@Override
-	public void alertNewMatch() { }
+	public void alertNewMatch() {
+		System.out.println("\n--- New Match ---\n");
+	}
 
 }

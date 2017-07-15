@@ -38,10 +38,17 @@ public class Neuron {
 			for (int i = 0; i < inputs.length; i++) {
 				value += inputs[i].getWeightedInput(func);
 			}
+			value = func.getOutput(value);
 		}
 		return this.value;
 	}
 	
+	/**
+	 * Computes the output from this Neuron using the given
+	 * activation function
+	 * @param func Activation function
+	 * @return Output from this Neuron
+	 */
 	public double getOutput(ActivationFunction func) {
 		if (inputs.length == 0)
 			return value;
@@ -54,6 +61,32 @@ public class Neuron {
 	 */
 	public void setValue(double value) {
 		this.value = value;
+	}
+	
+	/**
+	 * Update the values of the weights for the input Bridges connected
+	 * to this Neuron using the following function:<br><br>
+	 * <code>w = w + alpha * (d - f) * a' * x</code><br><br>
+	 * Where:
+	 * <br>-w is the current weight
+	 * <br>-alpha is the learning rate
+	 * <br>-d is the desired output
+	 * <br>-f is the observed output
+	 * <br>-a' is the derivative of the activation function
+	 * <br>-x is the input value to the bridge's weight
+	 * 
+	 * @param alpha Learning rate
+	 * @param f Observed output
+	 * @param d Desired output
+	 * @param payoff Payoff of this move
+	 * @param func Activation funciton
+	 */
+	protected void backpropagate(double alpha, double f, double d,
+			double payoff, ActivationFunction func) {
+		double delta = payoff * alpha * (d - f) * func.getDerivative(f);
+		for (Bridge b : inputs) {
+			b.weight += delta * b.neuron.getOutput(func);
+		}
 	}
 	
 	public String toString() {

@@ -62,6 +62,12 @@ public class Board {
 		return toString(false);
 	}
 	
+	/**
+	 * Return a String representation of this Board. If <code>indices</code>
+	 * is true, print the index of that Cell, otherwise print Piece.BLANK.
+	 * @param indices Whether to print indices for empty cells
+	 * @return String representation of this Board.
+	 */
 	public String toString(boolean indices) {
 		StringBuilder result = new StringBuilder();
 		boolean firstRow = true;

@@ -16,12 +16,14 @@ import t4.Player.*;
  */
 public class ConsoleGame extends Game {
 	public Scanner sc;
+	private boolean verbose;
 	
 	/**
 	 * Constructs a new Game and preps for user input.
 	 */
-	public ConsoleGame() {
+	public ConsoleGame(boolean verbose) {
 		super();
+		this.verbose = verbose;
 		sc = new Scanner(System.in);
 	}
 
@@ -29,44 +31,50 @@ public class ConsoleGame extends Game {
 	public void initializePlayers() {
 		try {
 			for (int i = 1; i <= NUM_PLAYERS; i++) {
-				Player player = null;
-
-				// input Player name
-				String name = getString("Input player " + i + " name: ");
-
-				// input Player type
-				String query = "Input player type:\n\t"
-						+ Player.HUMAN + " = human\n\t"
-						+ Player.RANDOM_AI + " = random AI\n\t"
-						+ Player.BASIC_AI + " = basic AI\n";
-				while (player == null) {
-					try {
-						switch(getInt(query)) {
-						case Player.HUMAN:
-							player = new Human(this, name);
-							break;
-						case Player.RANDOM_AI:
-							player = new RandomAI(this, name);
-							break;
-						case Player.BASIC_AI:
-							player = new BasicAI(this, name);
-							break;
-						default:
-							break;
-						}
-					} catch (InputMismatchException e) {}
-					if (player == null) {
-						System.out.println("Invalid player type");
-					}
-				}
-
-				// add Player to Game
-				addPlayer(player);
+				addPlayer(getNewPlayer(i));
 			}
 			assignPieces();
 		} catch (Exception e) {
 			System.out.println("Unable to get user input.");
 		}
+	}
+	
+	/**
+	 * Queries the user to get the name and type of a new player
+	 * @param index Player number for this Game
+	 * @return New Player with the input name and type
+	 */
+	private Player getNewPlayer(int index) {
+		Player player = null;
+		// input Player name
+		String name = getString("Input player " + index + " name: ");
+
+		// input Player type
+		String query = "Input player type:\n\t"
+				+ Player.HUMAN + " = human\n\t"
+				+ Player.RANDOM_AI + " = random AI\n\t"
+				+ Player.BASIC_AI + " = basic AI\n";
+		while (player == null) {
+			try {
+				switch(getInt(query)) {
+				case Player.HUMAN:
+					player = new Human(this, name);
+					break;
+				case Player.RANDOM_AI:
+					player = new RandomAI(this, name);
+					break;
+				case Player.BASIC_AI:
+					player = new BasicAI(this, name);
+					break;
+				default:
+					break;
+				}
+			} catch (InputMismatchException e) {}
+			if (player == null) {
+				System.out.println("Invalid player type");
+			}
+		}
+		return player;
 	}
 
 	@Override
@@ -82,7 +90,8 @@ public class ConsoleGame extends Game {
 			if (numToPlay == 0) {
 				numToPlay = getInt("Number of Matches to play? ", 1);
 			}
-			System.out.println("\nStarting Game " + ++matchNumber + "...\n");
+			if (verbose)
+				System.out.println("\nStarting Game " + ++matchNumber + "...\n");
 			match = new Match(matchNumber);
 			Board board = match.board;
 			boolean won = false;
@@ -103,23 +112,28 @@ public class ConsoleGame extends Game {
 			if (won) {
 				for (Player player : players) {
 					if (players.indexOf(player) == playIndex) {
-						System.out.println("\n--- Winner: " + player.getName() + " ---\n");
+						if (verbose)
+							System.out.println("\n--- Winner: " + player.getName() + " ---\n");
 						player.addWin();
 					} else {
 						player.addLoss();
 					}
 				}
 			} else {
-				System.out.println("\n--- Tie game ---\n");
+				if (verbose)
+					System.out.println("\n--- Tie game ---\n");
 				for (Player player : players) {
 					player.addTie();
 				}
 			}
-			printBoard(false);
-			printScores();
-			if (--numToPlay == 0 && !checkContinue()) {
-				System.out.println("Exiting...");
-				return;
+			if (verbose)
+				printBoard(false);
+			if (--numToPlay == 0) {
+				printScores();
+				if (!checkContinue()) {
+					System.out.println("Exiting...");
+					return;
+				}
 			}
 			// reassign pieces for new Match
 			assignPieces();
@@ -151,7 +165,7 @@ public class ConsoleGame extends Game {
 	public void printScores() {
 		System.out.println("Current standings:");
 		for (Player player : players) {
-			System.out.println("\t" + player.getName() + ": " + player.getScore());
+			System.out.println("\t" + player.getName() + ":\t" + player.getScore());
 		}
 	}
 	
@@ -164,7 +178,31 @@ public class ConsoleGame extends Game {
 			String input = getString("Play again? (y/n): ");
 			if (input.equalsIgnoreCase("y")) return true;
 			if (input.equalsIgnoreCase("n")) return false;
-			System.out.println("Invalid input.\n");
+			if (input.equalsIgnoreCase("s")) {
+				changePlayer();
+			} else {
+				System.out.println("Invalid input.\n");
+			}
+		}
+	}
+	
+	/**
+	 * Query the user to see which player they would like to replace
+	 */
+	private void changePlayer() {
+		while (true) {
+			String query = "Which player to replace?:\n";
+			for (int i = 1; i <= players.size(); i++) {
+				query += "\t" + i + " - " + players.get(i - 1).getName() + "\n";
+			}
+			int index = getInt(query, 0, players.size());
+			try {
+				players.remove(index - 1);
+				players.add(index - 1, getNewPlayer(index));
+				return;
+			} catch (IndexOutOfBoundsException e) {
+				return;
+			}
 		}
 	}
 	

@@ -29,16 +29,4 @@ public class RandomAI extends Player {
 		}
 	}
 
-	@Override
-	public void addWin() { this.score++; }
-
-	@Override
-	public void addLoss() { return; }
-
-	@Override
-	public void addTie() { return; }
-
-	@Override
-	public void alertNewMatch() { }
-
 }

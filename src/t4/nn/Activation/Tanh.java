@@ -21,4 +21,15 @@ public class Tanh extends ActivationFunction {
 		return pow / (1 + pow);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * This implementation uses the Tanh function:
+	 * <br><br><code>f = Math.exp(input) / (1 + Math.exp(input))</code>
+	 * <br><code>f' = 1 - f^2</code>
+	 */
+	public double getDerivative(double f) {
+		return 1 - f * f;
+	}
+
 }

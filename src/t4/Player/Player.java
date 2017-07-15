@@ -14,7 +14,9 @@ public abstract class Player implements Comparable<Player> {
 
 	private String name;
 	private Piece piece;
-	protected int score;
+	protected int wins;
+	protected int losses;
+	protected int ties;
 	protected Game game;
 
 	/**
@@ -55,10 +57,34 @@ public abstract class Player implements Comparable<Player> {
 
 	/**
 	 * Returns the number of wins for this Player
-	 * @return Player's score
+	 * @return Player's number of wins
 	 */
-	public int getScore() {
-		return this.score;
+	public int getWins() {
+		return this.wins;
+	}
+	
+	/**
+	 * Returns the number of losses for this Player
+	 * @return Player's number of losses
+	 */
+	public int getLosses() {
+		return this.losses;
+	}
+	
+	/**
+	 * Returns the number of ties for this Player
+	 * @return Player's number of ties
+	 */
+	public int getTies() {
+		return this.ties;
+	}
+	
+	/**
+	 * Returns a string representing the Player's score
+	 * @return String with number of wins, losses, and ties
+	 */
+	public String getScore() {
+		return "W: " + wins + " L: " + losses + " T: " + ties;
 	}
 
 	/**
@@ -89,8 +115,20 @@ public abstract class Player implements Comparable<Player> {
 	 * Sets the Player's score
 	 * @param score Score of the Player
 	 */
-	public void setScore(int score) {
-		this.score = score;
+	public void setScore(int wins) {
+		setScore(wins, 0, 0);
+	}
+	
+	/**
+	 * Sets the Player's number of wins, losses, and ties
+	 * @param wins Number of wins
+	 * @param losses Number of losses
+	 * @param ties Number of ties
+	 */
+	public void setScore(int wins, int losses, int ties) {
+		this.wins = wins;
+		this.losses = losses;
+		this.ties = ties;
 	}
 
 	/**
@@ -103,22 +141,28 @@ public abstract class Player implements Comparable<Player> {
 	/**
 	 * Tells the player that they won the current Match
 	 */
-	public abstract void addWin();
+	public void addWin() {
+		wins++;
+	}
 
 	/**
 	 * Tells the player that they lost the current Match
 	 */
-	public abstract void addLoss();
+	public void addLoss() {
+		losses++;
+	}
 
 	/**
 	 * Tells the player that they tied the current Match
 	 */
-	public abstract void addTie();
+	public void addTie() {
+		ties++;
+	}
 	
 	/**
 	 * Tells the player that a new Match is starting
 	 */
-	public abstract void alertNewMatch();
+	public void alertNewMatch() {};
 
 	public int compareTo(Player p) {
 		return this.piece.compareTo(p.piece);

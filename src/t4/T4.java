@@ -15,7 +15,12 @@ public class T4 {
 	 * @param args Program arguments
 	 */
 	public static void main(String[] args) {
-		Game game = new ConsoleGame();
+		boolean verbose = false;
+		for (String arg : args) {
+			if (arg.equals("-v"))
+				verbose = true;
+		}
+		Game game = new ConsoleGame(verbose);
 		game.run();
 	}
 

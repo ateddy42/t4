@@ -15,4 +15,11 @@ public abstract class ActivationFunction {
 	 * @return Output value of the Neuron
 	 */
 	public abstract double getOutput(double input);
+	
+	/**
+	 * Calculates the value of the derivative for the given input.
+	 * @param input Value to find the derivative of
+	 * @return Value of the derivative for the given value
+	 */
+	public abstract double getDerivative(double f);
 }

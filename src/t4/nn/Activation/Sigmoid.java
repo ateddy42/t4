@@ -19,5 +19,16 @@ public class Sigmoid extends ActivationFunction {
 	public double getOutput(double input) {
 		return 1 / (1 + Math.exp(-input));
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * This implementation uses the Sigmoid function:
+	 * <br><br><code>f = 1 / (1 + Math.exp(-input))</code>
+	 * <br><code>f' = f * (1 - f)</code>
+	 */
+	public double getDerivative(double f) {
+		return f * (1 - f);
+	}
 
 }

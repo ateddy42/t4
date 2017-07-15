@@ -72,10 +72,10 @@ public class Move {
 	
 	/**
 	 * Whether this Move is a winning Move, i.e. if the Player
-	 * plays this, will they win the t4 Game.
+	 * plays this, will they win the Match.
 	 * @return Whether the Move is a winning Move
 	 */
-	protected boolean isWinning() {
+	public boolean isWinning() {
 		if (checkHorizontal(row)) return true;
 		if (checkVertical(col)) return true;
 		if (row == col)
@@ -92,6 +92,7 @@ public class Move {
 	 */
 	private boolean checkHorizontal(int row) {
 		for (int j = 0; j < Board.NUM_COLS; j++) {
+			if (j == this.col) continue;
 			if (!board.cells[row][j].isOccupied())
 				return false;
 			if (!board.cells[row][j].getPlayer().equals(Player))
@@ -107,6 +108,7 @@ public class Move {
 	 */
 	private boolean checkVertical(int col) {
 		for (int i = 0; i < Board.NUM_ROWS; i++) {
+			if (i == this.row) continue;
 			if (!board.cells[i][col].isOccupied())
 				return false;
 			if (!board.cells[i][col].getPlayer().equals(Player))
@@ -122,6 +124,7 @@ public class Move {
 	 */
 	private boolean checkDiag1() {
 		for (int i = 0, j = 0; i < Board.NUM_ROWS && j < Board.NUM_COLS; i++, j++) {
+			if (i == this.row && j == this.col) continue;
 			if (!board.cells[i][j].isOccupied())
 				return false;
 			if (!board.cells[i][j].getPlayer().equals(Player))
@@ -137,6 +140,7 @@ public class Move {
 	 */
 	private boolean checkDiag2() {
 		for (int i = Board.NUM_ROWS - 1, j = 0; i >= 0 && j < Board.NUM_COLS; i--, j++) {
+			if (i == this.row && j == this.col) continue;
 			if (!board.cells[i][j].isOccupied())
 				return false;
 			if (!board.cells[i][j].getPlayer().equals(Player))
