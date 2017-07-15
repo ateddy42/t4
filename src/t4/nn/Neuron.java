@@ -1,5 +1,7 @@
 package t4.nn;
 
+import t4.nn.Activation.ActivationFunction;
+
 /**
  * A Neuron represents one node in a NeuralNet. It has
  * a value and a collection of Bridge inputs, linking
@@ -30,14 +32,20 @@ public class Neuron {
 	 * of the Neurons linked via the input Bridges.
 	 * @return Updated value for this Neuron
 	 */
-	protected double calculateValue() {
+	protected double calculateValue(ActivationFunction func) {
 		if (inputs.length != 0) {
 			value = 0;
 			for (int i = 0; i < inputs.length; i++) {
-				value += inputs[i].getWeightedInput();
+				value += inputs[i].getWeightedInput(func);
 			}
 		}
 		return this.value;
+	}
+	
+	public double getOutput(ActivationFunction func) {
+		if (inputs.length == 0)
+			return value;
+		return func.getOutput(value);
 	}
 	
 	/**

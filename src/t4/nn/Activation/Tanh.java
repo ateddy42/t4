@@ -16,7 +16,7 @@ public class Tanh extends ActivationFunction {
 	 * This implementation uses the Tanh function:
 	 * <br><br><code>Math.exp(input) / (1 + Math.exp(input))</code>
 	 */
-	protected double getOutput(double input) {
+	public double getOutput(double input) {
 		double pow = Math.exp(input);
 		return pow / (1 + pow);
 	}

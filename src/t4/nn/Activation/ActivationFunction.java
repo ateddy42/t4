@@ -14,5 +14,5 @@ public abstract class ActivationFunction {
 	 * @param input Input value of the Neuron
 	 * @return Output value of the Neuron
 	 */
-	protected abstract double getOutput(double input);
+	public abstract double getOutput(double input);
 }

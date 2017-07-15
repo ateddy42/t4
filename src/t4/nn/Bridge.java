@@ -1,5 +1,7 @@
 package t4.nn;
 
+import t4.nn.Activation.ActivationFunction;
+
 /**
  * A Bridge represents a link between a Neuron and one of its
  * input Neurons, and the corresponding weight between them.
@@ -26,7 +28,7 @@ public class Bridge {
 	 * @return Input Neuron's value multiplied by the weight of
 	 * the Bridge
 	 */
-	protected double getWeightedInput() {
-		return neuron.value * this.weight;
+	protected double getWeightedInput(ActivationFunction func) {
+		return neuron.getOutput(func) * this.weight;
 	}
 }

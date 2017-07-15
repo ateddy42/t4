@@ -82,7 +82,6 @@ public class ConsoleGame extends Game {
 			if (numToPlay == 0) {
 				numToPlay = getInt("Number of Matches to play? ", 1);
 			}
-			
 			System.out.println("\nStarting Game " + ++matchNumber + "...\n");
 			match = new Match(matchNumber);
 			Board board = match.board;
@@ -122,6 +121,8 @@ public class ConsoleGame extends Game {
 				System.out.println("Exiting...");
 				return;
 			}
+			// reassign pieces for new Match
+			assignPieces();
 		}
 	}
 	
@@ -141,7 +142,7 @@ public class ConsoleGame extends Game {
 	 * Prints the current state of the Board
 	 */
 	public void printBoard(boolean indices) {
-		System.out.println(match.board.toString(true));
+		System.out.println(match.board.toString(indices));
 	}
 	
 	/**

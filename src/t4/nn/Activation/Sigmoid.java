@@ -16,7 +16,7 @@ public class Sigmoid extends ActivationFunction {
 	 * This implementation uses the Sigmoid function:
 	 * <br><br><code>1 / (1 + Math.exp(-input))</code>
 	 */
-	protected double getOutput(double input) {
+	public double getOutput(double input) {
 		return 1 / (1 + Math.exp(-input));
 	}
 

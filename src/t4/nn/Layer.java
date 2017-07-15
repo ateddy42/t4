@@ -51,9 +51,8 @@ public class Layer {
 	 */
 	protected void updateValues() {
 		for (int i = 0; i < neurons.length; i++) {
-			neurons[i].calculateValue();
+			neurons[i].calculateValue(nn.activation);
 		}
-		System.out.println("hi");
 	}
 	
 	/**
