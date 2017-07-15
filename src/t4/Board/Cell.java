@@ -13,7 +13,7 @@ import t4.Player.Player;
 public class Cell {
 	private int row;
 	private int col;
-	private Player Player;
+	private Player player;
 	
 	/**
 	 * Creates a new Cell for the given row and column indices
@@ -23,7 +23,7 @@ public class Cell {
 	public Cell(int row, int col) {
 		this.row = row;
 		this.col = col;
-		this.Player = null;
+		this.player = null;
 	}
 	
 	/**
@@ -31,7 +31,7 @@ public class Cell {
 	 * @return The Player occupying this Cell
 	 */
 	public Player getPlayer() {
-		return Player;
+		return player;
 	}
 	
 	/**
@@ -39,7 +39,7 @@ public class Cell {
 	 * @param Player Player to occupy this Cell
 	 */
 	public void setPlayer(Player Player) {
-		this.Player = Player;
+		this.player = Player;
 	}
 	
 	/**
@@ -47,7 +47,7 @@ public class Cell {
 	 * @return Whether the cell is occupied
 	 */
 	public boolean isOccupied() {
-		return Player != null;
+		return player != null;
 	}
 	
 	/**
@@ -66,11 +66,37 @@ public class Cell {
 		return this.col;
 	}
 	
+	/**
+	 * Returns the index [0,9) of this Cell
+	 * @return Index of this Cell
+	 */
+	public int getIndex() {
+		return row * Board.NUM_ROWS + col;
+	}
+	
+	/**
+	 * Returns the row of the given index
+	 * @param index Index of the cell [0,9)
+	 * @return Row index of the given index
+	 */
+	public static int getRow(int index) {
+		return index / Board.NUM_ROWS;
+	}
+	
+	/**
+	 * Returns the column of the given index
+	 * @param index Index of the cell [0,9)
+	 * @return Column index of the given index
+	 */
+	public static int getCol(int index) {
+		return index % Board.NUM_COLS;
+	}
+	
 	public String toString(boolean indices) {
 		if (isOccupied())
-			return Player.getPiece().toString();
+			return player.getPiece().toString();
 		if (indices)
-			return String.valueOf(this.row * Board.NUM_ROWS + this.col);
+			return String.valueOf(getIndex());
 		return Piece.BLANK.toString();
 	}
 }

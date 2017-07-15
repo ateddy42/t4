@@ -57,4 +57,29 @@ public class Board {
 		cells[move.getRow()][move.getCol()].setPlayer(move.getPlayer());
 		return move.isWinning();
 	}
+	
+	public String toString() {
+		return toString(false);
+	}
+	
+	public String toString(boolean indices) {
+		StringBuilder result = new StringBuilder();
+		boolean firstRow = true;
+		for (int i = 0; i < Board.NUM_ROWS; i++) {
+			if (!firstRow) {
+				result.append("\n-----------\n");
+			}
+			boolean firstCol = true;
+			for (int j = 0; j < Board.NUM_COLS; j++) {
+				if (!firstCol) {
+					result.append(" |");
+				}
+				result.append(" " + cells[i][j].toString(indices));
+				firstCol = false;
+			}
+			firstRow = false;
+		}
+		result.append("\n");
+		return result.toString();
+	}
 }

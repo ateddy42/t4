@@ -31,9 +31,11 @@ public class Neuron {
 	 * @return Updated value for this Neuron
 	 */
 	protected double calculateValue() {
-		this.value = 0;
-		for (int i = 0; i < inputs.length; i++) {
-			value += inputs[i].getWeightedInput();
+		if (inputs.length != 0) {
+			value = 0;
+			for (int i = 0; i < inputs.length; i++) {
+				value += inputs[i].getWeightedInput();
+			}
 		}
 		return this.value;
 	}
@@ -44,5 +46,9 @@ public class Neuron {
 	 */
 	public void setValue(double value) {
 		this.value = value;
+	}
+	
+	public String toString() {
+		return String.valueOf(value);
 	}
 }

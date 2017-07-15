@@ -9,6 +9,7 @@ package t4.nn;
 public class Layer {
 	protected Neuron[] neurons;
 	protected NeuralNet nn;
+	private String name;
 	
 	/**
 	 * Constructs a new Layer with a given number of Neurons.
@@ -17,7 +18,9 @@ public class Layer {
 	 * as well as the NeuralNet bias.
 	 * @param numNeurons Number of Neurons in this Layer
 	 */
-	protected Layer(int numNeurons) {
+	public Layer(NeuralNet nn, int numNeurons, String name) {
+		this.nn = nn;
+		this.name = name;
 		this.neurons = new Neuron[numNeurons];
 		Layer lastLayer = nn.getOutputLayer();
 		int numInputs = lastLayer == null ? 0 : lastLayer.neurons.length + 1;
@@ -38,6 +41,7 @@ public class Layer {
 			}
 			neurons[i] = neuron;
 		}
+		nn.layers.add(this);
 	}
 	
 	/**
@@ -49,5 +53,36 @@ public class Layer {
 		for (int i = 0; i < neurons.length; i++) {
 			neurons[i].calculateValue();
 		}
+		System.out.println("hi");
+	}
+	
+	/**
+	 * Return an array of values for this Layer, corresponding to
+	 * each of the Neuron's values.
+	 * @return Array of values for this Layer's Neurons
+	 */
+	protected double[] getValues() {
+		double[] values = new double[neurons.length];
+		for (int i = 0; i < neurons.length; i++) {
+			values[i] = neurons[i].value;
+		}
+		return values;
+	}
+	
+	/**
+	 * Sets the values for each of the Neurons in this Layer
+	 * @param values Array of values
+	 * @throws Exception If number of values != number of Neurons
+	 */
+	protected void setValues(double[] values) throws Exception {
+		if (neurons.length != values.length)
+			throw new Exception("Number of input values does not match the number of Neurons");
+		for (int i = 0; i < neurons.length; i++) {
+			neurons[i].setValue(values[i]);
+		}
+	}
+	
+	public String toString() {
+		return this.name;
 	}
 }

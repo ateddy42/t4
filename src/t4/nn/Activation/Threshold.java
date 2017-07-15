@@ -8,7 +8,7 @@ package t4.nn.Activation;
  * @author Teddy
  */
 public class Threshold extends ActivationFunction {
-	public static double THRESHOLD = 1;
+	public static double THRESHOLD = 0;
 	
 	/**
 	 * {@inheritDoc}

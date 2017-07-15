@@ -3,6 +3,7 @@ package t4.nn;
 import java.util.ArrayList;
 
 import t4.nn.Activation.ActivationFunction;
+import t4.nn.Activation.Threshold;
 
 /**
  * A NeuralNet is a representation of a Neural Network.
@@ -15,6 +16,8 @@ import t4.nn.Activation.ActivationFunction;
  * @author Teddy
  */
 public class NeuralNet {
+	public static final double ALPHA = 0.5;
+	public static final double BIAS = 1;
 	public static double INIT_BIAS_WEIGHT = -1;
 	public static double INIT_NEURON_WEIGHT = 1;
 	
@@ -24,7 +27,34 @@ public class NeuralNet {
 	protected ActivationFunction activation;
 	
 	/**
-	 * Construct a new NeuralNet object with the given activation
+	 * Constructs a new NeuralNet object with the Threshold activation
+	 * function, and the default learning rate and bias value.
+	 */
+	public NeuralNet() {
+		this(new Threshold(), ALPHA, BIAS);
+	}
+	
+	/**
+	 * Constructs a new NeuralNet object with the given activation
+	 * function. Uses the default learning rate and bias values.
+	 * @param activation
+	 */
+	public NeuralNet(ActivationFunction activation) {
+		this(activation, ALPHA, BIAS);
+	}
+	
+	/**
+	 * Constructs a new NeuralNet object with the given activation
+	 * function and learning rate. Uses the default bias value.
+	 * @param activation Activation function
+	 * @param alpha Learning rate
+	 */
+	public NeuralNet(ActivationFunction activation, double alpha) {
+		this(activation, alpha, BIAS);
+	}
+	
+	/**
+	 * Constructs a new NeuralNet object with the given activation
 	 * function, learning rate, and bias value.
 	 * @param activation Activation function
 	 * @param alpha Learning rate
@@ -53,5 +83,29 @@ public class NeuralNet {
 	public Layer getInputLayer() {
 		if (layers.isEmpty()) return null;
 		return layers.get(0);
+	}
+	
+	/**
+	 * Sets the values for the input layer from the given array
+	 * @param values Input values for the NeuralNet
+	 * @return Whether the function succeeded
+	 * @throws Exception If number of values != number of Neurons
+	 */
+	public void setInputValues(double[] values) throws Exception {
+		getInputLayer().setValues(values);
+	}
+	
+	/**
+	 * Updates the calculated values for each layer, and returns the
+	 * values for the output layer
+	 * @return Values for the output layer
+	 */
+	public double[] getOutputValues() {
+		// update values for all layers, in order
+		for (Layer layer : layers) {
+			layer.updateValues();
+		}
+		// fetch updated values for output layer
+		return getOutputLayer().getValues();
 	}
 }

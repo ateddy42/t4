@@ -10,7 +10,7 @@ import t4.Game.Game;
  * @author Teddy
  */
 public abstract class Player implements Comparable<Player> {
-	public static final int HUMAN = 1, AI = 2;
+	public static final int HUMAN = 1, RANDOM_AI = 2, BASIC_AI = 3;
 
 	private String name;
 	private Piece piece;
@@ -109,13 +109,22 @@ public abstract class Player implements Comparable<Player> {
 	 * Tells the player that they lost the current Match
 	 */
 	public abstract void addLoss();
-	
+
 	/**
 	 * Tells the player that they tied the current Match
 	 */
 	public abstract void addTie();
 	
+	/**
+	 * Tells the player that a new Match is starting
+	 */
+	public abstract void alertNewMatch();
+
 	public int compareTo(Player p) {
 		return this.piece.compareTo(p.piece);
+	}
+	
+	public String toString() {
+		return this.piece + " - " + this.name;
 	}
 }

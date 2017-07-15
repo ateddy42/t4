@@ -7,14 +7,19 @@ import java.util.Scanner;
 
 import t4.Board.Board;
 import t4.Board.Move;
-import t4.Player.Human;
-import t4.Player.Piece;
-import t4.Player.Player;
-import t4.Player.RandomAI;
+import t4.Player.*;
 
+/**
+ * A ConsoleGame is a T4 implementation to be played via the Console.
+ * 
+ * @author Teddy
+ */
 public class ConsoleGame extends Game {
 	public Scanner sc;
 	
+	/**
+	 * Constructs a new Game and preps for user input.
+	 */
 	public ConsoleGame() {
 		super();
 		sc = new Scanner(System.in);
@@ -30,17 +35,21 @@ public class ConsoleGame extends Game {
 				String name = getString("Input player " + i + " name: ");
 
 				// input Player type
-				String query = "Input player type ("
-						+ Player.HUMAN + " = human, "
-						+ Player.AI + " = AI): ";
+				String query = "Input player type:\n\t"
+						+ Player.HUMAN + " = human\n\t"
+						+ Player.RANDOM_AI + " = random AI\n\t"
+						+ Player.BASIC_AI + " = basic AI\n";
 				while (player == null) {
 					try {
 						switch(getInt(query)) {
 						case Player.HUMAN:
 							player = new Human(this, name);
 							break;
-						case Player.AI:
+						case Player.RANDOM_AI:
 							player = new RandomAI(this, name);
+							break;
+						case Player.BASIC_AI:
+							player = new BasicAI(this, name);
 							break;
 						default:
 							break;
@@ -68,12 +77,22 @@ public class ConsoleGame extends Game {
 			return;
 		}
 		int matchNumber = 0;
+		int numToPlay = 0;
 		while (true) {
+			if (numToPlay == 0) {
+				numToPlay = getInt("Number of Matches to play? ", 1);
+			}
+			
 			System.out.println("\nStarting Game " + ++matchNumber + "...\n");
 			match = new Match(matchNumber);
 			Board board = match.board;
 			boolean won = false;
-			int playIndex = 0;
+			// tell the players a new match is beginning
+			for (Player p : players) {
+				p.alertNewMatch();
+			}
+
+			int playIndex = -1;
 			while (!won && board.isPlayable()) {
 				playIndex = ++playIndex % Game.NUM_PLAYERS;
 				Player player = players.get(playIndex);
@@ -99,7 +118,7 @@ public class ConsoleGame extends Game {
 			}
 			printBoard(false);
 			printScores();
-			if (!checkContinue()) {
+			if (--numToPlay == 0 && !checkContinue()) {
 				System.out.println("Exiting...");
 				return;
 			}
@@ -122,23 +141,7 @@ public class ConsoleGame extends Game {
 	 * Prints the current state of the Board
 	 */
 	public void printBoard(boolean indices) {
-		Board board = match.board;
-		boolean firstRow = true;
-		for (int i = 0; i < Board.NUM_ROWS; i++) {
-			if (!firstRow) {
-				System.out.println("\n-----------");
-			}
-			boolean firstCol = true;
-			for (int j = 0; j < Board.NUM_COLS; j++) {
-				if (!firstCol) {
-					System.out.print(" |");
-				}
-				System.out.print(" " + board.cells[i][j].toString(indices));
-				firstCol = false;
-			}
-			firstRow = false;
-		}
-		System.out.println("\n");
+		System.out.println(match.board.toString(true));
 	}
 	
 	/**
@@ -149,7 +152,6 @@ public class ConsoleGame extends Game {
 		for (Player player : players) {
 			System.out.println("\t" + player.getName() + ": " + player.getScore());
 		}
-		System.out.println("\n");
 	}
 	
 	/**
@@ -167,7 +169,8 @@ public class ConsoleGame extends Game {
 	
 	/**
 	 * {@inheritDoc}
-	 * This implementation queries the user via the console.
+	 * This implementation queries the user via the console using
+	 * the given query.
 	 */
 	public int getInt(String query) {
 		return getInt(query, Integer.MIN_VALUE, Integer.MAX_VALUE);
@@ -175,7 +178,17 @@ public class ConsoleGame extends Game {
 	
 	/**
 	 * {@inheritDoc}
-	 * This implementation queries the user via the console.
+	 * This implementation queries the user via the console using
+	 * the given query and minimum allowable value.
+	 */
+	public int getInt(String query, int min) {
+		return getInt(query, min, Integer.MAX_VALUE);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * This implementation queries the user via the console using
+	 * the given query and minimum/maximum allowable values.
 	 */
 	public int getInt(String query, int min, int max) {
 		int in = -1;
