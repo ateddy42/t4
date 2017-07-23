@@ -1,7 +1,6 @@
 package t4.Player;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import t4.Board.Board;
 import t4.Board.Cell;
@@ -20,6 +19,7 @@ public class BasicAI extends Player {
 	private static final double PAYOFF_LOSS = -1;
 	private static final double PAYOFF_TIE = 0.1;
 	private static final double DIMINISH_RATE = 0.5;
+	private static final double OUTPUT_THRESHOLD = 0.6;
 
 	private NeuralNet nn;
 	private ArrayList<MoveData> data;
@@ -78,25 +78,58 @@ public class BasicAI extends Player {
 		// get output from NeuralNet and sort by decreasing value
 		double[] output = nn.getOutputValues();
 		ArrayList<Entry> entries = new ArrayList<>();
-		Collections.sort(entries);
+		double totalProb = 0;
 		for (int i = 0; i < output.length; i++) {
-		    entries.add(new Entry(i, output[i]));
+		    if (output[i] > OUTPUT_THRESHOLD) {
+		    	totalProb += output[i];
+		    	entries.add(new Entry(i, output[i]));
+		    }
 		}
-		
-		// Try moves in decreasing order of value
-		for (Entry e : entries) {
-			int row = Cell.getRow(e.index);
-			int col = Cell.getCol(e.index);
-			Move move = new Move(board, row, col, this);
-			if (move.isValid()) {
-				// mark desired array with 1 to note which Cell was played
-				desired[e.index] = 1;
-				// Create MoveData Object for Backpropagation
-				MoveData md = new MoveData(inputs, desired);
-				data.add(md);
-				return move;
+
+		// Loop through moves above threshold and check validity
+		while (!entries.isEmpty()) {
+			double p = Math.random() * totalProb;
+			double cumProb = 0.0;
+			for (Entry e : entries) {
+				cumProb += e.value;
+				if (cumProb > p) {
+					int row = Cell.getRow(e.index);
+					int col = Cell.getCol(e.index);
+					Move move = new Move(board, row, col, this);
+					if (move.isValid()) {
+						// mark desired array with 1 to note which Cell was played
+						desired[e.index] = 1;
+						// Create MoveData Object for Backpropagation
+						MoveData md = new MoveData(inputs, desired);
+						data.add(md);
+						return move;
+					} else {
+						// invalid move, so remove from array of possible moves
+						totalProb -= e.value;
+						entries.remove(e);
+						break;
+					}
+				}
 			}
 		}
+		
+		// rare case where only valid move is below threshold probability
+		for (int i = 0; i < output.length; i++) {
+		    if (output[i] <= OUTPUT_THRESHOLD) {
+		    	int row = Cell.getRow(i);
+				int col = Cell.getCol(i);
+				Move move = new Move(board, row, col, this);
+				if (move.isValid()) {
+					// mark desired array with 1 to note which Cell was played
+					desired[i] = 1;
+					// Create MoveData Object for Backpropagation
+					MoveData md = new MoveData(inputs, desired);
+					data.add(md);
+					return move;
+				}
+		    }
+		}
+		
 		System.out.println("ERROR: Unable to find a valid move");
 		return null;
 	}
@@ -187,5 +220,9 @@ class Entry implements Comparable<Entry> {
 	@Override
 	public int compareTo(Entry o) {
         return (int) (o.value - this.value);
+	}
+	
+	public String toString() {
+		return this.index + " - " + this.value;
 	}
 }
