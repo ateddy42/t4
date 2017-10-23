@@ -53,7 +53,8 @@ public class ConsoleGame extends Game {
 		String query = "Input player type:\n\t"
 				+ Player.HUMAN + " = human\n\t"
 				+ Player.RANDOM_AI + " = random AI\n\t"
-				+ Player.BASIC_AI + " = basic AI\n";
+				+ Player.BASIC_AI + " = basic AI\n\t"
+				+ Player.NEW_AI + " = new AI\n";
 		while (player == null) {
 			try {
 				switch(getInt(query)) {
@@ -66,6 +67,8 @@ public class ConsoleGame extends Game {
 				case Player.BASIC_AI:
 					player = new BasicAI(this, name);
 					break;
+				case Player.NEW_AI:
+					player = new NewAI(this, name);
 				default:
 					break;
 				}

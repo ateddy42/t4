@@ -89,9 +89,9 @@ public class NeuralNet {
 	 * Sets the values for the input layer from the given array
 	 * @param values Input values for the NeuralNet
 	 * @return Whether the function succeeded
-	 * @throws Exception If number of values != number of Neurons
+	 * @throws IndexOutOfBoundsException If number of values != number of Neurons
 	 */
-	public void setInputValues(double[] values) throws Exception {
+	public void setInputValues(double[] values) throws IndexOutOfBoundsException {
 		getInputLayer().setValues(values);
 	}
 	
@@ -119,7 +119,7 @@ public class NeuralNet {
 	 * @throws Exception If number of values != number of Neurons
 	 */
 	public void backpropagate(double[] input, double[] desired,
-			double payoff) throws Exception {
+			double payoff) throws IndexOutOfBoundsException {
 		setInputValues(input);
 		double[] output = getOutputValues();
 		for (int i = layers.size() - 1; i >= 0; i--) {

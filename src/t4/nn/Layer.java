@@ -81,11 +81,11 @@ public class Layer {
 	/**
 	 * Sets the values for each of the Neurons in this Layer
 	 * @param values Array of values
-	 * @throws Exception If number of values != number of Neurons
+	 * @throws IndexOutOfBoundsException If number of values != number of Neurons
 	 */
-	protected void setValues(double[] values) throws Exception {
+	protected void setValues(double[] values) throws IndexOutOfBoundsException {
 		if (neurons.length != values.length)
-			throw new Exception("Number of input values does not match the number of Neurons");
+			throw new IndexOutOfBoundsException("Number of input values does not match the number of Neurons");
 		for (int i = 0; i < neurons.length; i++) {
 			neurons[i].setValue(values[i]);
 		}

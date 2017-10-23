@@ -10,7 +10,7 @@ import t4.Game.Game;
  * @author Teddy
  */
 public abstract class Player implements Comparable<Player> {
-	public static final int HUMAN = 1, RANDOM_AI = 2, BASIC_AI = 3;
+	public static final int HUMAN = 1, RANDOM_AI = 2, BASIC_AI = 3, NEW_AI = 4;
 
 	private String name;
 	private Piece piece;

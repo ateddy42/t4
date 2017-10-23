@@ -12,7 +12,7 @@ import t4.nn.Activation.Sigmoid;
 import t4.nn.Player.Util.Entry;
 import t4.nn.Player.Util.MoveData;
 
-public class BasicAI extends Player {
+public class NewAI extends Player {
 	private static final int NUM_INPUTS = 18;
 	private static final int NUM_HIDDEN_LAYERS = 1;
 	private static final int NUM_HIDDEN_NEURONS = 10;
@@ -29,11 +29,12 @@ public class BasicAI extends Player {
 	/**
 	 * Creates a Basic AI with the default values for NeuralNet
 	 * learning rate and bias value, but with the {@link Sigmoid}
-	 * activation function
+	 * activation function. Backpropagates when an invalid move
+	 * is tried.
 	 * @param game Game this AI is playing
 	 * @param name Name of this AI
 	 */
-	public BasicAI(Game game, String name) {
+	public NewAI(Game game, String name) {
 		super(game, name);
 		nn = new NeuralNet(new Sigmoid());
 		data = new ArrayList<>();
@@ -109,6 +110,12 @@ public class BasicAI extends Player {
 						// invalid move, so remove from array of possible moves
 						totalProb -= e.value;
 						entries.remove(e);
+						// backpropogate for invalid moves
+						try {
+							nn.backpropagate(inputs, desired, PAYOFF_LOSS);
+						} catch (IndexOutOfBoundsException e1) {
+							System.out.println("ERROR: Unable to backpropagate values");
+						}
 						break;
 					}
 				}
@@ -166,7 +173,7 @@ public class BasicAI extends Player {
 				nn.backpropagate(md.inputs, md.desired, payoff);
 				payoff = payoff * DIMINISH_RATE;
 			}
-		} catch (Exception e) {
+		} catch (IndexOutOfBoundsException e) {
 			System.out.println("ERROR: Unable to backpropagate values");
 		}
 	}
