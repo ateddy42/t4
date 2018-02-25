@@ -6,9 +6,9 @@ import t4.Board.Board;
 import t4.Board.Cell;
 import t4.Board.Move;
 import t4.Game.Game;
-import t4.nn.Layer;
-import t4.nn.NeuralNet;
-import t4.nn.Activation.Sigmoid;
+import t4.NeuralNet.Layer;
+import t4.NeuralNet.NeuralNet;
+import t4.NeuralNet.Activation.Sigmoid;
 import t4.nn.Player.Util.Entry;
 import t4.nn.Player.Util.MoveData;
 

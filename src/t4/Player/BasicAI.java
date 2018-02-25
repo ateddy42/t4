@@ -6,9 +6,9 @@ import t4.Board.Board;
 import t4.Board.Cell;
 import t4.Board.Move;
 import t4.Game.Game;
-import t4.nn.Layer;
-import t4.nn.NeuralNet;
-import t4.nn.Activation.Sigmoid;
+import t4.NeuralNet.Layer;
+import t4.NeuralNet.NeuralNet;
+import t4.NeuralNet.Activation.Sigmoid;
 import t4.nn.Player.Util.Entry;
 import t4.nn.Player.Util.MoveData;
 
@@ -23,7 +23,7 @@ public class BasicAI extends Player {
 	private static final double DIMINISH_RATE = 0.5;
 	private static final double OUTPUT_THRESHOLD = 0.6;
 
-	private NeuralNet nn;
+	private t4.NeuralNet.NeuralNet nn;
 	private ArrayList<MoveData> data;
 
 	/**
