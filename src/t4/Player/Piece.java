@@ -22,6 +22,7 @@ public enum Piece implements Comparable<Piece> {
 	
 	/**
 	 * Returns the marker for this Piece
+	 * @return Marker for this piece
 	 */
 	public String getMarker() {
 		return this.marker;

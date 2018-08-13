@@ -22,13 +22,14 @@ public abstract class Player implements Comparable<Player> {
 	/**
 	 * Sets the Player's name to the given input, identifying piece
 	 * to Piece.BLANK, and the score to 0
+	 * @param game Game this player is for
 	 * @param name Name of the Player
 	 */
 	public Player(Game game, String name) {
 		setGame(game);
 		setName(name);
 		setPiece(Piece.BLANK);
-		setScore(0);
+		setScore(0, 0, 0);
 	}
 
 	/**
@@ -109,14 +110,6 @@ public abstract class Player implements Comparable<Player> {
 	 */
 	public void setPiece(Piece piece) {
 		this.piece = piece;
-	}
-
-	/**
-	 * Sets the Player's score
-	 * @param score Score of the Player
-	 */
-	public void setScore(int wins) {
-		setScore(wins, 0, 0);
 	}
 	
 	/**

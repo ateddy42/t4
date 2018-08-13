@@ -14,6 +14,8 @@ public class MoveData {
 	
 	/**
 	 * Constructs a new MoveData() object and initializes the Collections.
+	 * @param inputs Array of input values
+	 * @param desired Array of desired output values
 	 */
 	public MoveData(double[] inputs, double[] desired) {
 		this.inputs  = inputs;

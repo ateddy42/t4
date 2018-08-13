@@ -16,10 +16,14 @@ import t4.Player.*;
  */
 public class ConsoleGame extends Game {
 	public Scanner sc;
+	/**
+	 * If true, prints extra information when running the game
+	 */
 	private boolean verbose;
 	
 	/**
 	 * Constructs a new Game and preps for user input.
+	 * @param verbose Whether to put the system in verbose mode
 	 */
 	public ConsoleGame(boolean verbose) {
 		super();
@@ -157,6 +161,7 @@ public class ConsoleGame extends Game {
 	
 	/**
 	 * Prints the current state of the Board
+	 * @param indices Whether to print indices for empty cells
 	 */
 	public void printBoard(boolean indices) {
 		System.out.println(match.board.toString(indices));

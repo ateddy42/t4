@@ -6,7 +6,6 @@ import t4.Board.Board;
 import t4.Board.Cell;
 import t4.Board.Move;
 import t4.Game.Game;
-import t4.NeuralNet.Layer;
 import t4.NeuralNet.NeuralNet;
 import t4.NeuralNet.Activation.Sigmoid;
 import t4.nn.Player.Util.Entry;
@@ -35,18 +34,16 @@ public class BasicAI extends Player {
 	 */
 	public BasicAI(Game game, String name) {
 		super(game, name);
-		nn = new NeuralNet(new Sigmoid());
+		nn = new NeuralNet(NUM_INPUTS, new Sigmoid());
 		data = new ArrayList<>();
-		// Create Input Layer
-		new Layer(nn, NUM_INPUTS, "Input Layer");
-
+		
 		// Create Hidden Layer(s)
 		for (int i = 0; i < NUM_HIDDEN_LAYERS; i++) {
-			new Layer(nn, NUM_HIDDEN_NEURONS, "Hidden Layer " + i);
+			nn.addLayer(NUM_HIDDEN_NEURONS, "Hidden Layer " + i);
 		}
 
 		// Create Output Layer
-		new Layer(nn, NUM_OUTPUTS, "Output Layer");
+		nn.addLayer(NUM_OUTPUTS, "Output Layer");
 	}
 
 	@Override
